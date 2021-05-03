@@ -1,5 +1,6 @@
 ﻿using ApplicationCore.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,13 +19,48 @@ namespace Infrastructure.Data
         {
             builder.Entity<MovieCast>().HasKey(x => new { x.CastId,x.MovieId,x.Character });
             builder.Entity<MovieCrew>().HasKey(x => new { x.MovieId,x.CrewId,x.Department,x.Job });
-            builder.Entity<MovieGenre>().HasKey(x => new { x.MovieId,x.GenreId });
+            //builder.Entity<MovieGenre>().HasKey(x => new { x.MovieId,x.GenreId });
             builder.Entity<Review>().HasKey(x => new { x.MovieId,x.UserId });
             builder.Entity<UserRole>().HasKey(x => new { x.RoleId,x.UserId });
+            builder.Entity<Movie>(ConfigureMovie);
+            builder.Entity<Trailer>(ConfigureTrailer);
+
+            //create MovieGenre table using Linq statement
+            builder.Entity<Movie>().HasMany(m => m.Genres).WithMany(g => g.Movies)
+               .UsingEntity<Dictionary<string, object>>("MovieGenre",
+                   m => m.HasOne<Genre>().WithMany().HasForeignKey("GenreId"),
+                   g => g.HasOne<Movie>().WithMany().HasForeignKey("MovieId"));
+        }
+
+        private void ConfigureTrailer(EntityTypeBuilder<Trailer> builder)
+        {
+            builder.ToTable("Trailer");
+            builder.HasKey(t => t.Id);
+            builder.Property(t => t.TrailerUrl).HasMaxLength(2084);
+            builder.Property(t => t.Name).HasMaxLength(2084);
+        }
+
+        private void ConfigureMovie (EntityTypeBuilder<Movie> builder)
+        {
+            builder.ToTable("Movie");
+            builder.HasKey(m => m.Id);
+            builder.Property(m => m.Title).HasMaxLength(256);
+            builder.Property(m => m.Overview).HasMaxLength(4096);
+            builder.Property(m => m.Tagline).HasMaxLength(512);
+            builder.Property(m => m.ImdbUrl).HasMaxLength(2084);
+            builder.Property(m => m.TmdbUrl).HasMaxLength(2084);
+            builder.Property(m => m.PosterUrl).HasMaxLength(2084);
+            builder.Property(m => m.BackdropUrl).HasMaxLength(2084);
+            builder.Property(m => m.OriginalLanguage).HasMaxLength(64);
+            builder.Property(m => m.Price).HasColumnType("decimal(5, 2)").HasDefaultValue(9.9m);
+            builder.Property(m => m.Budget).HasColumnType("decimal(18, 4)").HasDefaultValue(9.9m);
+            builder.Property(m => m.Revenue).HasColumnType("decimal(18, 4)").HasDefaultValue(9.9m);
+            builder.Property(m => m.CreatedDate).HasDefaultValueSql("getdate()");
+            builder.Ignore(m => m.Rating);
         }
 
         public DbSet<Genre> Genres { get; set; }
-        public DbSet<MovieGenre> MovieGenres { get; set; }
+        //public DbSet<MovieGenre> MovieGenres { get; set; }
         public DbSet<Crew> Crews { get; set; }
         public DbSet<MovieCrew> MovieCrews { get; set; }
         public DbSet<Movie> Movies { get; set; }
