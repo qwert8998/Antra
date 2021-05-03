@@ -24,12 +24,24 @@ namespace Infrastructure.Data
             builder.Entity<UserRole>().HasKey(x => new { x.RoleId,x.UserId });
             builder.Entity<Movie>(ConfigureMovie);
             builder.Entity<Trailer>(ConfigureTrailer);
+            builder.Entity<User>(ConfigureUser);
 
             //create MovieGenre table using Linq statement
             builder.Entity<Movie>().HasMany(m => m.Genres).WithMany(g => g.Movies)
                .UsingEntity<Dictionary<string, object>>("MovieGenre",
                    m => m.HasOne<Genre>().WithMany().HasForeignKey("GenreId"),
                    g => g.HasOne<Movie>().WithMany().HasForeignKey("MovieId"));
+        }
+        
+        private void ConfigureUser(EntityTypeBuilder<User> builder)
+        {
+            builder.ToTable("User");
+            builder.Property(u => u.FirstName).HasMaxLength(128);
+            builder.Property(u => u.LastName).HasMaxLength(128);
+            builder.Property(u => u.Email).HasMaxLength(256);
+            builder.Property(u => u.HashedPassword).HasMaxLength(1024);
+            builder.Property(u => u.Salt).HasMaxLength(1024);
+            builder.Property(u => u.PhoneNumber).HasMaxLength(16);
         }
 
         private void ConfigureTrailer(EntityTypeBuilder<Trailer> builder)

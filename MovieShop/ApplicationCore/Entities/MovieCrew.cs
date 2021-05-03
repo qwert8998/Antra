@@ -1,8 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ApplicationCore.Entities
 {
+    [Table("MovieCrew")]
     public class MovieCrew
     {
         [Key]
@@ -20,5 +22,8 @@ namespace ApplicationCore.Entities
         [Key]
         [Column(Order = 4)]
         public string Job { get; set; }
+
+        public Movie Movie { get; set; }
+        public Crew Crew { get; set; }
     }
 }

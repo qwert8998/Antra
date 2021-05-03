@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ApplicationCore.Entities
 {
+    [Table("MovieCast")]
     public class MovieCast
     {
         [Key]
@@ -16,5 +17,8 @@ namespace ApplicationCore.Entities
         [Key]
         [Column(Order = 3)]
         public string Character { get; set; }
+
+        public Cast Cast { get; set; }
+        public Movie Movie { get; set; }
     }
 }
