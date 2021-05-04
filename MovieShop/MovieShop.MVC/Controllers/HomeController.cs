@@ -1,9 +1,14 @@
-﻿using ApplicationCore.ServiceInterface;
-using Infrastructure.Services;
+﻿using ApplicationCore.Models.Response;
+using ApplicationCore.ServiceInterface;
+using Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MovieShop.MVC.Models;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MovieShop.MVC.Controllers
 {
@@ -24,14 +29,10 @@ namespace MovieShop.MVC.Controllers
             _service = service;
         }
 
-        public HomeController(ILogger<HomeController> logger)
+        public async Task<IActionResult> Index()
         {
-            _logger = logger;
-        }
-
-        public IActionResult Index()
-        {
-            var movies = _service.GetTop30RevenueMovies();
+            //var movies = _service.GetTop30RevenueMovies();
+            var movies = await _service.GetTop30RevenueMovies();
 
             return View(movies);
         }
