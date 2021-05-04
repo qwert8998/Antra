@@ -1,13 +1,8 @@
-﻿using ApplicationCore.Models.Response;
-using ApplicationCore.ServiceInterface;
-using Infrastructure.Data;
+﻿using ApplicationCore.ServiceInterface;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MovieShop.MVC.Models;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MovieShop.MVC.Controllers
