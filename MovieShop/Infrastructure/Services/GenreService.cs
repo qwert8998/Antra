@@ -9,9 +9,9 @@ namespace Infrastructure.Services
 {
     public class GenreService : IGenreService
     {
-        private readonly IAsyncRepository<Genre> _genreRepository;
+        private readonly IGenreRepository _genreRepository;
 
-        public GenreService(IAsyncRepository<Genre> genreRepository)
+        public GenreService(IGenreRepository genreRepository)
         {
             _genreRepository = genreRepository;
         }
@@ -28,6 +28,11 @@ namespace Infrastructure.Services
                 });
             }
             return genreList;
+        }
+
+        public async Task<List<Genre>> GetGenresByMovieId(int id)
+        {
+            return await _genreRepository.GetGenresByMovieId(id);
         }
     }
 }

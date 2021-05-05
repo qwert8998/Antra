@@ -35,6 +35,13 @@ namespace Infrastructure.Repositories
             return movie;
 
         }
+
+        public async Task<IEnumerable<Movie>> GetMoviesByGenre(int Id)
+        {
+            var movies =
+                await _dbContext.Genres.Include(g => g.Movies).Where(g => g.Id == Id).SelectMany(g => g.Movies).ToListAsync();
+            return movies;
+        }
         //First() : First() will throw an exception if there is no result data
         //FirstOrDefault() : FirstOrDefault() returns a default value (null) if there is no result data
         //Single() : Returns the only element from a collection, or the only element that satisfies a

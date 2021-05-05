@@ -309,3 +309,4 @@ D:\Job\(2)Antra-FullStack\HW\AntraGit\MovieShop\MovieShop.MVC\obj\Debug\net5.0\R
 D:\Job\(2)Antra-FullStack\HW\AntraGit\MovieShop\MovieShop.MVC\obj\Debug\net5.0\Razor\Views\Shared\LoginInfoPartial.cshtml.g.cs
 D:\Job\(2)Antra-FullStack\HW\AntraGit\MovieShop\MovieShop.MVC\obj\Debug\net5.0\Razor\Views\Account\Register.cshtml.g.cs
 D:\Job\(2)Antra-FullStack\HW\AntraGit\MovieShop\MovieShop.MVC\obj\Debug\net5.0\Razor\Views\Account\Login.cshtml.g.cs
+D:\Job\(2)Antra-FullStack\HW\AntraGit\MovieShop\MovieShop.MVC\obj\Debug\net5.0\Razor\Views\Movies\Details.cshtml.g.cs

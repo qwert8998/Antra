@@ -17,7 +17,6 @@ namespace MovieShop.MVC.Views.Shared.Components.Genres
         {
             var genres = await _genreService.GetAllGenres();
             return View(genres);
-            
         }
     }
 }
