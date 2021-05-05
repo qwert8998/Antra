@@ -304,3 +304,8 @@ D:\Job\(2)Antra-FullStack\HW\AntraGit\MovieShop\MovieShop.MVC\obj\Debug\net5.0\M
 D:\Job\(2)Antra-FullStack\HW\AntraGit\MovieShop\MovieShop.MVC\obj\Debug\net5.0\ref\MovieShop.MVC.dll
 D:\Job\(2)Antra-FullStack\HW\AntraGit\MovieShop\MovieShop.MVC\obj\Debug\net5.0\MovieShop.MVC.pdb
 D:\Job\(2)Antra-FullStack\HW\AntraGit\MovieShop\MovieShop.MVC\obj\Debug\net5.0\MovieShop.MVC.genruntimeconfig.cache
+D:\Job\(2)Antra-FullStack\HW\AntraGit\MovieShop\MovieShop.MVC\obj\Debug\net5.0\Razor\Views\Shared\_MovvieCard.cshtml.g.cs
+D:\Job\(2)Antra-FullStack\HW\AntraGit\MovieShop\MovieShop.MVC\obj\Debug\net5.0\Razor\Views\Shared\Components\Genres\Default.cshtml.g.cs
+D:\Job\(2)Antra-FullStack\HW\AntraGit\MovieShop\MovieShop.MVC\obj\Debug\net5.0\Razor\Views\Shared\LoginInfoPartial.cshtml.g.cs
+D:\Job\(2)Antra-FullStack\HW\AntraGit\MovieShop\MovieShop.MVC\obj\Debug\net5.0\Razor\Views\Account\Register.cshtml.g.cs
+D:\Job\(2)Antra-FullStack\HW\AntraGit\MovieShop\MovieShop.MVC\obj\Debug\net5.0\Razor\Views\Account\Login.cshtml.g.cs

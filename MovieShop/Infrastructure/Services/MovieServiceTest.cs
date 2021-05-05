@@ -5,9 +5,9 @@ namespace Infrastructure.Services
 {
     public class MovieServiceTest //: IMovieService
     {
-        public List<MovieResponseModel> GetTop30RevenueMovies()
+        public List<MovieCardResponseModel> GetTop30RevenueMovies()
         {
-            var movies = new List<MovieResponseModel>
+            var movies = new List<MovieCardResponseModel>
             {
                 new() {Id = 1, Title = "Avengers: Infinity War", Budget = 1200000},
                 new() {Id = 2, Title = "Avatar", Budget = 1200000},
