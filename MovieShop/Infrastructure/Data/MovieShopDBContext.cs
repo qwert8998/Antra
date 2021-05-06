@@ -39,9 +39,11 @@ namespace Infrastructure.Data
             builder.Property(u => u.FirstName).HasMaxLength(128);
             builder.Property(u => u.LastName).HasMaxLength(128);
             builder.Property(u => u.Email).HasMaxLength(256);
+            builder.HasIndex(u => u.Email).IsUnique();
             builder.Property(u => u.HashedPassword).HasMaxLength(1024);
             builder.Property(u => u.Salt).HasMaxLength(1024);
             builder.Property(u => u.PhoneNumber).HasMaxLength(16);
+            builder.Property(u => u.IsLocked).HasDefaultValue(false);
         }
 
         private void ConfigureTrailer(EntityTypeBuilder<Trailer> builder)

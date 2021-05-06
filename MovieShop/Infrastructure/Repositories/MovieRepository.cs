@@ -22,7 +22,10 @@ namespace Infrastructure.Repositories
 
         public override async Task<Movie> GetByIdAsync(int id)
         {
-            var movie = await _dbContext.Movies.Include(m => m.Genres).FirstOrDefaultAsync(m => m.Id == id);
+            //var movie = await _dbContext.Movies.Include(m => m.Genres).FirstOrDefaultAsync(m => m.Id == id);
+            var movie = await _dbContext.Movies.Include(m => m.MovieCasts).ThenInclude(m => m.Cast)
+                .Include(m => m.Genres)
+                .FirstOrDefaultAsync(m => m.Id == id);
             // cast for that movie
             // Average Rating
             // Genres for that movie

@@ -2,6 +2,7 @@
 using ApplicationCore.RepositoryInterface;
 using ApplicationCore.ServiceInterface;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Services
@@ -9,34 +10,30 @@ namespace Infrastructure.Services
     public class MovieService : IMovieService
     {
         private readonly IMovieRepository _movieRepository;
-        private readonly IGenreRepository _genreRepository;
         private readonly ICastRepository _castRepository;
-        private readonly IMovieCastRepository _movieCastRepository;
 
-        public MovieService(IMovieRepository movieRepository, IGenreRepository genreRepository
-            , ICastRepository castRepository, IMovieCastRepository movieCastRepository)
+        public MovieService(IMovieRepository movieRepository, ICastRepository castRepository)
         {
             _movieRepository = movieRepository;
-            _genreRepository = genreRepository;
             _castRepository = castRepository;
-            _movieCastRepository = movieCastRepository;
         }
 
         public async Task<MovieDetailsResponseModel> GetMovieDetails(int id)
         {
             var result = new MovieDetailsResponseModel();
-            result.Genres = await _genreRepository.GetGenresByMovieId(id);
+            //result.Genres = await _genreRepository.GetGenresByMovieId(id);
             result.Movie = await _movieRepository.GetByIdAsync(id);
+            result.Genres = result.Movie.Genres.ToList();
             var casts = await _castRepository.GetCastsByMovieId(id);
             var moviecast = new List<CastModel>();
             foreach(var cast in casts)
             {
-                var chara = await _movieCastRepository.GetMovieCastByMovieIdAndCastId(id, cast.Id);
+                var chara = result.Movie.MovieCasts.Where(m => m.CastId == cast.Id && m.MovieId == id).Select(m => m.Character).FirstOrDefault(); 
                 moviecast.Add(new CastModel { 
                     Id = cast.Id,
                     Name = cast.Name,
                     ProfilePath = cast.ProfilePath,
-                    Character = chara.Character
+                    Character = chara
                 });
             }
             result.Casts = moviecast;
