@@ -312,3 +312,6 @@ D:\Job\(2)Antra-FullStack\HW\AntraGit\MovieShop\MovieShop.MVC\obj\Debug\net5.0\R
 D:\Job\(2)Antra-FullStack\HW\AntraGit\MovieShop\MovieShop.MVC\obj\Debug\net5.0\Razor\Views\Movies\Details.cshtml.g.cs
 D:\Job\(2)Antra-FullStack\HW\AntraGit\MovieShop\MovieShop.MVC\bin\Debug\net5.0\Microsoft.AspNetCore.Cryptography.Internal.dll
 D:\Job\(2)Antra-FullStack\HW\AntraGit\MovieShop\MovieShop.MVC\bin\Debug\net5.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+D:\Job\(2)Antra-FullStack\HW\AntraGit\MovieShop\MovieShop.MVC\obj\Debug\net5.0\Razor\Views\Account\EditProfile.cshtml.g.cs
+D:\Job\(2)Antra-FullStack\HW\AntraGit\MovieShop\MovieShop.MVC\obj\Debug\net5.0\Razor\Views\Account\Profile.cshtml.g.cs
+D:\Job\(2)Antra-FullStack\HW\AntraGit\MovieShop\MovieShop.MVC\obj\Debug\net5.0\Razor\Views\User\Purchases.cshtml.g.cs

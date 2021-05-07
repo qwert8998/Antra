@@ -72,6 +72,23 @@ namespace MovieShop.MVC.Controllers
 
         public async Task<IActionResult> Logout()
         {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Login");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Profile()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditProfile(UserRequestModel requestModel)
+        {
+            //call the database and get the user information and fill that in textboxes,
+            //so user can edit and save them.
+            // call the user service and map the UserRequestModel data in to User entity
+            // and call the repository
             return View();
         }
     }

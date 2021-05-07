@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MovieShop.MVC.Filters;
 using System;
 
 namespace MovieShop.MVC
@@ -27,7 +28,12 @@ namespace MovieShop.MVC
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            //all controller inherent MovieShopHeaderFilter
+            services.AddControllersWithViews(options =>
+                options.Filters.Add(typeof(MovieShopHeaderFilter))
+            );
+            //inject filter can be done in specific action
+            services.AddScoped<MovieShopHeaderFilter>();
 
             //inject connectionstring into Infrastructure.Data.MovieShopDBContext constructor
             services.AddDbContext<MovieShopDBContext>(options => options.UseSqlServer(
@@ -44,6 +50,7 @@ namespace MovieShop.MVC
             services.AddScoped<IUserRepository,UserRepository>();
             services.AddScoped<IUserService,UserService>();
             services.AddScoped<IAsyncRepository<Genre>, EfRepository<Genre>>();
+            services.AddScoped<ICurrentUserService,CurrentUserService>();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(option => {
@@ -51,6 +58,7 @@ namespace MovieShop.MVC
                     option.ExpireTimeSpan = TimeSpan.FromHours(2);
                     option.LoginPath = "/Account/Login";
                 });
+            services.AddHttpContextAccessor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
