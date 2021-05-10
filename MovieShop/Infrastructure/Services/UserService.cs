@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Entities;
+using ApplicationCore.Exceptions;
 using ApplicationCore.Models.Request;
 using ApplicationCore.Models.Response;
 using ApplicationCore.RepositoryInterface;
@@ -25,7 +26,7 @@ namespace Infrastructure.Services
             // if   user exists
             if (dbUser != null)
             {
-                throw new Exception("User Already exists, please try to login");
+                throw new ConflictException("User Already exists, please try to login");
             }
 
             // generate a unique salt
@@ -100,6 +101,25 @@ namespace Infrastructure.Services
                 iterationCount: 10000,
                 numBytesRequested: 256 / 8));
             return hashed;
+        }
+
+        public async Task<UserDetailsResponseModel> GetUserById(int id)
+        {
+            var user = await _userRepository.GetByIdAsync(id);
+
+            if(user == null)
+            {
+                throw new NotFoundException("User doesn't exist");
+            }
+
+            var details = new UserDetailsResponseModel() { 
+                Id = user.Id,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName
+            };
+
+            return details;
         }
     }
 }

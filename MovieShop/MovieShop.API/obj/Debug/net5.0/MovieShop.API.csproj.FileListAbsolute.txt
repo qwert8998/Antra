@@ -120,3 +120,9 @@ D:\Job\(2)Antra-FullStack\HW\AntraGit\MovieShop\MovieShop.API\obj\Debug\net5.0\M
 D:\Job\(2)Antra-FullStack\HW\AntraGit\MovieShop\MovieShop.API\obj\Debug\net5.0\ref\MovieShop.API.dll
 D:\Job\(2)Antra-FullStack\HW\AntraGit\MovieShop\MovieShop.API\obj\Debug\net5.0\MovieShop.API.pdb
 D:\Job\(2)Antra-FullStack\HW\AntraGit\MovieShop\MovieShop.API\obj\Debug\net5.0\MovieShop.API.genruntimeconfig.cache
+D:\Job\(2)Antra-FullStack\HW\AntraGit\MovieShop\MovieShop.API\bin\Debug\net5.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+D:\Job\(2)Antra-FullStack\HW\AntraGit\MovieShop\MovieShop.API\bin\Debug\net5.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+D:\Job\(2)Antra-FullStack\HW\AntraGit\MovieShop\MovieShop.API\bin\Debug\net5.0\ApplicationCore.dll
+D:\Job\(2)Antra-FullStack\HW\AntraGit\MovieShop\MovieShop.API\bin\Debug\net5.0\Infrastructure.dll
+D:\Job\(2)Antra-FullStack\HW\AntraGit\MovieShop\MovieShop.API\bin\Debug\net5.0\ApplicationCore.pdb
+D:\Job\(2)Antra-FullStack\HW\AntraGit\MovieShop\MovieShop.API\bin\Debug\net5.0\Infrastructure.pdb
