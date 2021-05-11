@@ -4,6 +4,7 @@ using ApplicationCore.Models.Request;
 using ApplicationCore.Models.Response;
 using ApplicationCore.RepositoryInterface;
 using ApplicationCore.ServiceInterface;
+using AutoMapper;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System;
 using System.Security.Cryptography;
@@ -14,10 +15,17 @@ namespace Infrastructure.Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IPurchaseRepository _purchaseRepository;
+        private readonly IMapper _mapper;
+        private readonly IMovieService _movieService;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, IPurchaseRepository purchaseRepository
+            , IMapper mapper, IMovieService movieService)
         {
             _userRepository = userRepository;
+            _purchaseRepository = purchaseRepository;
+            _mapper = mapper;
+            _movieService = movieService;
         }
         public async Task<UserRegisterResponseModel> RegisterUser(UserRegisterRequestModel registerRequest)
         {
@@ -120,6 +128,24 @@ namespace Infrastructure.Services
             };
 
             return details;
+        }
+
+        public async Task PurchaseMovie(PurchaseRequestModel purchaseRequest)
+        {
+            if (await IsMoviePurchased(purchaseRequest))
+                throw new ConflictException("Movie already Purchased");
+            // Get Movie Price from Movie Table
+            var movie = await _movieService.GetMovieDetails(purchaseRequest.MovieId);
+            purchaseRequest.TotalPrice = movie.Movie.Price;
+
+            var purchase = _mapper.Map<Purchase>(purchaseRequest);
+            await _purchaseRepository.AddAsync(purchase);
+        }
+
+        public async Task<bool> IsMoviePurchased(PurchaseRequestModel purchaseRequest)
+        {
+            return await _purchaseRepository.GetExistsAsync(p =>
+                p.UserId == purchaseRequest.UserId && p.MovieId == purchaseRequest.MovieId);
         }
     }
 }

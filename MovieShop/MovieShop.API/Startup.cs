@@ -2,6 +2,7 @@ using ApplicationCore.Entities;
 using ApplicationCore.RepositoryInterface;
 using ApplicationCore.ServiceInterface;
 using Infrastructure.Data;
+using Infrastructure.Helpers;
 using Infrastructure.Repositories;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
@@ -46,6 +47,7 @@ namespace MovieShop.API
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAsyncRepository<Genre>, EfRepository<Genre>>();
+            services.AddScoped<IPurchaseRepository,PurchaseRepository>();
 
             services.AddDbContext<MovieShopDBContext>(options => options.UseSqlServer(
                 Configuration.GetConnectionString("MovieShop")
@@ -54,6 +56,7 @@ namespace MovieShop.API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MovieShop.API", Version = "v1" });
             });
+            services.AddAutoMapper(typeof(Startup), typeof(MovieShopMappingProfile));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

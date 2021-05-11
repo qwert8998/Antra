@@ -51,6 +51,7 @@ namespace MovieShop.MVC
             services.AddScoped<IUserService,UserService>();
             services.AddScoped<IAsyncRepository<Genre>, EfRepository<Genre>>();
             services.AddScoped<ICurrentUserService,CurrentUserService>();
+            services.AddScoped<IPurchaseRepository,PurchaseRepository>();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(option => {
