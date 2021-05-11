@@ -36,5 +36,18 @@ namespace MovieShop.API.Controllers
             var user = await _userService.GetUserById(id);
             return Ok(user);
         }
+
+        [HttpPost]
+        [Route("Login")]
+        public async Task<IActionResult> Login (UserLoginRequestModel requestModel)
+        {
+            var user = await _userService.ValidateUser(requestModel.Email, requestModel.Password);
+            if(user != null)
+            {
+                return Ok(user);
+            }
+
+            return ValidationProblem("Email or Password is incorrect!");
+        }
     }
 }

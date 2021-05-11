@@ -8,5 +8,8 @@ namespace ApplicationCore.RepositoryInterface
     {
         Task<IEnumerable<Movie>> GetTop30RevenueMovies();
         Task<IEnumerable<Movie>> GetMoviesByGenre(int Id);
+
+        Task<int> GetTopRatingMovieId();
+        Task<List<Review>> GetReviewsByMovieId(int id);
     }
 }

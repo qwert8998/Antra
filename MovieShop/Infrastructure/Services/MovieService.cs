@@ -1,4 +1,6 @@
-﻿using ApplicationCore.Models.Response;
+﻿using ApplicationCore.Entities;
+using ApplicationCore.Exceptions;
+using ApplicationCore.Models.Response;
 using ApplicationCore.RepositoryInterface;
 using ApplicationCore.ServiceInterface;
 using System.Collections.Generic;
@@ -22,13 +24,41 @@ namespace Infrastructure.Services
         {
             var result = new MovieDetailsResponseModel();
             //result.Genres = await _genreRepository.GetGenresByMovieId(id);
-            result.Movie = await _movieRepository.GetByIdAsync(id);
-            result.Genres = result.Movie.Genres.ToList();
+            var movie = await _movieRepository.GetByIdAsync(id);
+            result.Movie = new MovieModel() { 
+                Id = movie.Id,
+                BackdropUrl = movie.BackdropUrl,
+                Budget = movie.Budget,
+                CReatedBy = movie.CReatedBy,
+                CreatedDate = movie.CreatedDate,
+                ImdbUrl = movie.ImdbUrl,
+                OriginalLanguage = movie.OriginalLanguage,
+                Overview = movie.Overview,
+                PosterUrl = movie.PosterUrl,
+                Price = movie.Price,
+                Rating = movie.Rating,
+                ReleaseDate = movie.ReleaseDate,
+                Revenue = movie.Revenue,
+                RunTime = movie.RunTime,
+                Tagline = movie.Tagline,
+                Title = movie.Title,
+                TmdbUrl = movie.TmdbUrl,
+                UpdatedBy = movie.UpdatedBy,
+                UpdatedDate = movie.UpdatedDate
+            };
+            result.Genres = new List<GenreModel>();
+            foreach(var item in movie.Genres)
+            {
+                result.Genres.Add(new GenreModel() { 
+                    Id = item.Id,
+                    Name = item.Name
+                });
+            }
             var casts = await _castRepository.GetCastsByMovieId(id);
             var moviecast = new List<CastModel>();
             foreach(var cast in casts)
             {
-                var chara = result.Movie.MovieCasts.Where(m => m.CastId == cast.Id && m.MovieId == id).Select(m => m.Character).FirstOrDefault(); 
+                var chara = movie.MovieCasts.Where(m => m.CastId == cast.Id && m.MovieId == id).Select(m => m.Character).FirstOrDefault(); 
                 moviecast.Add(new CastModel { 
                     Id = cast.Id,
                     Name = cast.Name,
@@ -74,6 +104,33 @@ namespace Infrastructure.Services
             }
 
             return topMovies;
+        }
+
+        public async Task<MovieDetailsResponseModel> GetTopRateMovie()
+        {
+            var movieId = await _movieRepository.GetTopRatingMovieId();
+            var result = await GetMovieDetails(movieId);
+
+            return result;
+        }
+
+        public async Task<List<MovieReviewResponseModel>> GetReviewsForMovie(int id)
+        {
+            var reviews = await _movieRepository.GetReviewsByMovieId(id);
+            if (reviews == null)
+                throw new NotFoundException("Not found any reviews.");
+            var result = new List<MovieReviewResponseModel>();
+            foreach(var item in reviews)
+            {
+                result.Add(new MovieReviewResponseModel() { 
+                    MovieId = item.MovieId,
+                    Rating = item.Rating,
+                    ReviewText = item.ReviewText,
+                    UserId = item.UserId
+                });
+            }
+
+            return result;
         }
     }
 }

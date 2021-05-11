@@ -39,11 +39,25 @@ namespace Infrastructure.Repositories
 
         }
 
+        public async Task<int> GetTopRatingMovieId()
+        {
+            var rating = await _dbContext.Reviews.GroupBy(t => new { t.MovieId})
+                .Select(g => new { Average = g.Average(t => t.Rating), Id = g.Key.MovieId }).ToListAsync();
+
+            return rating.OrderByDescending(r => r.Average).Select(r => r.Id).FirstOrDefault();
+        }
+
         public async Task<IEnumerable<Movie>> GetMoviesByGenre(int Id)
         {
             var movies =
                 await _dbContext.Genres.Include(g => g.Movies).Where(g => g.Id == Id).SelectMany(g => g.Movies).ToListAsync();
             return movies;
+        }
+
+        public async Task<List<Review>> GetReviewsByMovieId(int id)
+        {
+            var reviews = await _dbContext.Reviews.Include(r => r.Movie).Where(r => r.MovieId == id).ToListAsync();
+            return reviews;
         }
         //First() : First() will throw an exception if there is no result data
         //FirstOrDefault() : FirstOrDefault() returns a default value (null) if there is no result data
