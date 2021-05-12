@@ -72,6 +72,10 @@ namespace MovieShop.API
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MovieShop.API v1"));
             }
 
+            app.UseCors(builder => {
+                builder.WithOrigins(Configuration.GetValue<string>("ClientSPAUrl")).AllowAnyHeader().AllowAnyMethod();
+            });
+
             app.UseHttpsRedirection();
             //app.UseStaticFiles(); --does not need, API only delivery data (not like MVC)
 
