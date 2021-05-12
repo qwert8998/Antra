@@ -2,6 +2,7 @@ using ApplicationCore.Entities;
 using ApplicationCore.RepositoryInterface;
 using ApplicationCore.ServiceInterface;
 using Infrastructure.Data;
+using Infrastructure.Helpers;
 using Infrastructure.Repositories;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -52,7 +53,10 @@ namespace MovieShop.MVC
             services.AddScoped<IAsyncRepository<Genre>, EfRepository<Genre>>();
             services.AddScoped<ICurrentUserService,CurrentUserService>();
             services.AddScoped<IPurchaseRepository,PurchaseRepository>();
+            services.AddScoped<IFavoriteRepository,FavoriteReposiotry>();
+            services.AddScoped<IReviewRepository,ReviewRepository>();
 
+            services.AddAutoMapper(typeof(Startup), typeof(MovieShopMappingProfile));
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(option => {
                     option.Cookie.Name = "MovieShpAuthCookie";

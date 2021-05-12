@@ -7,6 +7,8 @@ using ApplicationCore.ServiceInterface;
 using AutoMapper;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 
@@ -18,14 +20,18 @@ namespace Infrastructure.Services
         private readonly IPurchaseRepository _purchaseRepository;
         private readonly IMapper _mapper;
         private readonly IMovieService _movieService;
-
+        private readonly IFavoriteRepository _favoriteRepository;
+        private readonly IReviewRepository _reviewRepository;
         public UserService(IUserRepository userRepository, IPurchaseRepository purchaseRepository
-            , IMapper mapper, IMovieService movieService)
+            , IMapper mapper, IMovieService movieService, IFavoriteRepository favoriteRepository
+            , IReviewRepository reviewRepository)
         {
             _userRepository = userRepository;
             _purchaseRepository = purchaseRepository;
             _mapper = mapper;
             _movieService = movieService;
+            _favoriteRepository = favoriteRepository;
+            _reviewRepository = reviewRepository;
         }
         public async Task<UserRegisterResponseModel> RegisterUser(UserRegisterRequestModel registerRequest)
         {
@@ -146,6 +152,68 @@ namespace Infrastructure.Services
         {
             return await _purchaseRepository.GetExistsAsync(p =>
                 p.UserId == purchaseRequest.UserId && p.MovieId == purchaseRequest.MovieId);
+        }
+
+        public async Task AddFavorite(FavoriteRequestModel favoriteRequest)
+        {
+            if (await FavoriteExists(favoriteRequest.UserId, favoriteRequest.MovieId))
+                throw new ConflictException("Movie already Favorited");
+
+            var favorite = _mapper.Map<Favorite>(favoriteRequest);
+            await _favoriteRepository.AddAsync(favorite);
+        }
+
+        public async Task RemoveFavorite(FavoriteRequestModel favoriteRequest)
+        {
+            if(await FavoriteExists(favoriteRequest.UserId, favoriteRequest.MovieId))
+            {
+                var dbFavorite =
+                await _favoriteRepository.ListAsync(r => r.UserId == favoriteRequest.UserId &&
+                                                         r.MovieId == favoriteRequest.MovieId);
+                await _favoriteRepository.DeleteAsync(dbFavorite.First());
+            }
+        }
+
+        public async Task<bool> FavoriteExists(int id, int movieId)
+        {
+            return await _favoriteRepository.GetExistsAsync(f => f.MovieId == movieId &&
+                                                                 f.UserId == id);
+        }
+
+        public async Task AddReview(ReviewRequestModel reviewRequest)
+        {
+            var review = _mapper.Map<Review>(reviewRequest);
+            await _reviewRepository.AddAsync(review);
+        }
+
+        public async Task UpdateReview(ReviewRequestModel reviewRequest)
+        {
+            var review = _mapper.Map<Review>(reviewRequest);
+            await _reviewRepository.UpdateAsync(review);
+        }
+
+        public async Task DeleteReview(int userId, int movieId)
+        {
+            var review = await _reviewRepository.ListAsync(r => r.UserId == userId && r.MovieId == movieId);
+            await _reviewRepository.DeleteAsync(review.First());
+        }
+
+        public async Task<PurchaseResponseModel> GetAllPurchaseMoviesByUserId(int id)
+        {
+            var result = await _purchaseRepository.GetAllPurchaseByUserId(id);
+            return _mapper.Map<PurchaseResponseModel>(result);
+        }
+
+        public async Task<FavoriteResponseModel> GetAllFavoriteByUserId(int id)
+        {
+            var result = await _favoriteRepository.GetAllFavoriteByUserId(id);
+            return _mapper.Map<FavoriteResponseModel>(result);
+        }
+
+        public async Task<ReviewResponseModel> GetAllReviewsByUserId(int id)
+        {
+            var result = await _reviewRepository.GetAllReviewsByUserId(id);
+            return _mapper.Map<ReviewResponseModel>(result);
         }
     }
 }

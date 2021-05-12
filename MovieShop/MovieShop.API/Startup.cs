@@ -48,6 +48,8 @@ namespace MovieShop.API
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAsyncRepository<Genre>, EfRepository<Genre>>();
             services.AddScoped<IPurchaseRepository,PurchaseRepository>();
+            services.AddScoped<IFavoriteRepository,FavoriteReposiotry>();
+            services.AddScoped<IReviewRepository,ReviewRepository>();
 
             services.AddDbContext<MovieShopDBContext>(options => options.UseSqlServer(
                 Configuration.GetConnectionString("MovieShop")

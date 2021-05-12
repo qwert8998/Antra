@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 
 namespace ApplicationCore.RepositoryInterface
 {
-    public interface IPurchaseRepository : IAsyncRepository<Purchase>
+    public interface IReviewRepository : IAsyncRepository<Review>
     {
-        Task<List<Purchase>> GetAllPurchaseByUserId(int id);
+        Task<List<Review>> GetAllReviewsByUserId(int id);
     }
 }

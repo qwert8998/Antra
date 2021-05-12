@@ -1,6 +1,7 @@
 ﻿using ApplicationCore.Entities;
 using ApplicationCore.RepositoryInterface;
 using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,12 @@ namespace Infrastructure.Repositories
     {
         public PurchaseRepository(MovieShopDBContext dbContext) : base(dbContext)
         {
+        }
+
+        public async Task<List<Purchase>> GetAllPurchaseByUserId(int id)
+        {
+            var result = await _dbContext.Purchases.Include(p => p.Movie).Where(p => p.UserId == id).ToListAsync();
+            return result;
         }
     }
 }
