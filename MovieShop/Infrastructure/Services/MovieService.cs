@@ -1,8 +1,10 @@
 ﻿using ApplicationCore.Entities;
 using ApplicationCore.Exceptions;
+using ApplicationCore.Models.Request;
 using ApplicationCore.Models.Response;
 using ApplicationCore.RepositoryInterface;
 using ApplicationCore.ServiceInterface;
+using AutoMapper;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,11 +15,16 @@ namespace Infrastructure.Services
     {
         private readonly IMovieRepository _movieRepository;
         private readonly ICastRepository _castRepository;
+        private readonly IGenreRepository _genreRepository;
+        private readonly IMapper _mapper;
 
-        public MovieService(IMovieRepository movieRepository, ICastRepository castRepository)
+        public MovieService(IMovieRepository movieRepository, ICastRepository castRepository
+            ,IGenreRepository genreRepository, IMapper mapper)
         {
             _movieRepository = movieRepository;
             _castRepository = castRepository;
+            _genreRepository = genreRepository;
+            _mapper = mapper;
         }
 
         public async Task<MovieDetailsResponseModel> GetMovieDetails(int id)
@@ -131,6 +138,24 @@ namespace Infrastructure.Services
             }
 
             return result;
+        }
+
+        public async Task<Movie> CreateMovie(CreateMovieRequest movieRequest)
+        {
+            var movie = _mapper.Map<Movie>(movieRequest);
+            var created = await _movieRepository.AddAsync(movie);
+
+            foreach (var item in movieRequest.Genres)
+            {
+                var gen = new MovieGenre()
+                {
+                    GenreId = item.Id,
+                    MovieId = created.Id
+                };
+                await _genreRepository.AddMovieGenre(gen);
+            }
+
+            return created;
         }
     }
 }

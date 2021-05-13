@@ -2,11 +2,8 @@
 using ApplicationCore.Models.Request;
 using ApplicationCore.Models.Response;
 using AutoMapper;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Helpers
 {
@@ -30,6 +27,32 @@ namespace Infrastructure.Helpers
             CreateMap<PurchaseRequestModel, Purchase>();
             CreateMap<FavoriteRequestModel, Favorite>();
             CreateMap<ReviewRequestModel, Review>();
+            CreateMap<CreateMovieRequest, Movie>()
+                //.ForMember(r => r.BackdropUrl, opt => opt.MapFrom(src => src.BackdropUrl))
+                //.ForMember(r => r.Budget, opt => opt.MapFrom(src => src.Budget))
+                //.ForMember(r => r.ImdbUrl, opt => opt.MapFrom(src => src.ImdbUrl))
+                //.ForMember(r => r.OriginalLanguage, opt => opt.MapFrom(src => src.OriginalLanguage))
+                //.ForMember(r => r.Overview, opt => opt.MapFrom(src => src.Overview))
+                //.ForMember(r => r.PosterUrl, opt => opt.MapFrom(src => src.PosterUrl))
+                //.ForMember(r => r.Price, opt => opt.MapFrom(src => src.Price))
+                //.ForMember(r => r.ReleaseDate, opt => opt.MapFrom(src => src.ReleaseDate))
+                //.ForMember(r => r.Revenue, opt => opt.MapFrom(src => src.Revenue))
+                //.ForMember(r => r.RunTime, opt => opt.MapFrom(src => src.RunTime))
+                //.ForMember(r => r.Tagline, opt => opt.MapFrom(src => src.Tagline))
+                //.ForMember(r => r.Title, opt => opt.MapFrom(src => src.Title))
+                //.ForMember(r => r.TmdbUrl, opt => opt.MapFrom(src => src.TmdbUrl))
+                .ForMember(r => r.Genres, opt => opt.MapFrom(src => GetMovieGenres(src.Genres)));
+        }
+
+        private List<Genre> GetMovieGenres(IEnumerable<GenreModel> srcGenres)
+        {
+            var movieGenres = new List<Genre>();
+            foreach (var genre in srcGenres)
+            {
+                movieGenres.Add(new Genre { Id = genre.Id, Name = genre.Name });
+            }
+
+            return movieGenres;
         }
 
         private List<PurchaseResponseModel.PurchasedMovieResponseModel> GetPurchasedMovies(

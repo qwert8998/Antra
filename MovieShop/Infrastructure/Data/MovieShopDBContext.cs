@@ -19,7 +19,7 @@ namespace Infrastructure.Data
         {
             builder.Entity<MovieCast>().HasKey(x => new { x.CastId,x.MovieId,x.Character });
             builder.Entity<MovieCrew>().HasKey(x => new { x.MovieId,x.CrewId,x.Department,x.Job });
-            //builder.Entity<MovieGenre>().HasKey(x => new { x.MovieId,x.GenreId });
+            builder.Entity<MovieGenre>().HasKey(x => new { x.MovieId,x.GenreId });
             builder.Entity<Review>().HasKey(x => new { x.MovieId,x.UserId });
             builder.Entity<UserRole>().HasKey(x => new { x.RoleId,x.UserId });
             builder.Entity<Movie>(ConfigureMovie);
@@ -27,10 +27,10 @@ namespace Infrastructure.Data
             builder.Entity<User>(ConfigureUser);
 
             //create MovieGenre table using Linq statement
-            builder.Entity<Movie>().HasMany(m => m.Genres).WithMany(g => g.Movies)
-               .UsingEntity<Dictionary<string, object>>("MovieGenre",
-                   m => m.HasOne<Genre>().WithMany().HasForeignKey("GenreId"),
-                   g => g.HasOne<Movie>().WithMany().HasForeignKey("MovieId"));
+            //builder.Entity<Movie>().HasMany(m => m.Genres).WithMany(g => g.Movies)
+            //   .UsingEntity<Dictionary<string, object>>("MovieGenre",
+            //       m => m.HasOne<Genre>().WithMany().HasForeignKey("GenreId"),
+            //       g => g.HasOne<Movie>().WithMany().HasForeignKey("MovieId"));
         }
         
         private void ConfigureUser(EntityTypeBuilder<User> builder)
@@ -74,7 +74,7 @@ namespace Infrastructure.Data
         }
 
         public DbSet<Genre> Genres { get; set; }
-        //public DbSet<MovieGenre> MovieGenres { get; set; }
+        public DbSet<MovieGenre> MovieGenres { get; set; }
         public DbSet<Crew> Crews { get; set; }
         public DbSet<MovieCrew> MovieCrews { get; set; }
         public DbSet<Movie> Movies { get; set; }

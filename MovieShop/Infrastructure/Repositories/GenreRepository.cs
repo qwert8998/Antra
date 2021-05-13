@@ -2,10 +2,8 @@
 using ApplicationCore.RepositoryInterface;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
@@ -20,6 +18,13 @@ namespace Infrastructure.Repositories
         {
             var genres = await _dbContext.Movies.Include(m => m.Genres).Where(m => m.Id == id).SelectMany(g => g.Genres).ToListAsync();
             return genres;
+        }
+
+        public async Task AddMovieGenre(MovieGenre movieGenre)
+        {
+            _dbContext.Set<MovieGenre>().Add(movieGenre);
+            await _dbContext.SaveChangesAsync();
+
         }
     }
 }
