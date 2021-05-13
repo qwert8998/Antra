@@ -1,6 +1,8 @@
 ﻿using ApplicationCore.Entities;
+using ApplicationCore.Models.Response;
 using ApplicationCore.RepositoryInterface;
 using Infrastructure.Data;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,11 +22,27 @@ namespace Infrastructure.Repositories
             return genres;
         }
 
-        public async Task AddMovieGenre(MovieGenre movieGenre)
+        public async Task AddMovieGenre(int genreId, int movieId)
         {
-            _dbContext.Set<MovieGenre>().Add(movieGenre);
+            var sql = @"INSERT dbo.MovieGenre VALUES (@GenreId,@MovieId)";
+            SqlParameter[] parameters = new SqlParameter[] 
+            { 
+                new SqlParameter("@GenreId",genreId),
+                new SqlParameter("@MovieId", movieId)
+            };
+            await _dbContext.Database.ExecuteSqlRawAsync(sql, parameters);
             await _dbContext.SaveChangesAsync();
+        }
 
+        public async Task DeleteOldGenre (int movieId)
+        {
+            var sql = @"DELETE dbo.MovieGenre WHERE MovieId=@MovieId";
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@MovieId", movieId)
+            };
+            await _dbContext.Database.ExecuteSqlRawAsync(sql, parameters);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

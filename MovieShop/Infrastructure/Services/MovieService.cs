@@ -16,14 +16,16 @@ namespace Infrastructure.Services
         private readonly IMovieRepository _movieRepository;
         private readonly ICastRepository _castRepository;
         private readonly IGenreRepository _genreRepository;
+        private readonly IPurchaseRepository _purchaseRepository;
         private readonly IMapper _mapper;
 
         public MovieService(IMovieRepository movieRepository, ICastRepository castRepository
-            ,IGenreRepository genreRepository, IMapper mapper)
+            ,IGenreRepository genreRepository, IPurchaseRepository purchaseRepository, IMapper mapper)
         {
             _movieRepository = movieRepository;
             _castRepository = castRepository;
             _genreRepository = genreRepository;
+            _purchaseRepository = purchaseRepository;
             _mapper = mapper;
         }
 
@@ -142,20 +144,57 @@ namespace Infrastructure.Services
 
         public async Task<Movie> CreateMovie(CreateMovieRequest movieRequest)
         {
-            var movie = _mapper.Map<Movie>(movieRequest);
+            var movie = ConvertRequestToMovie(movieRequest);
             var created = await _movieRepository.AddAsync(movie);
 
             foreach (var item in movieRequest.Genres)
             {
-                var gen = new MovieGenre()
-                {
-                    GenreId = item.Id,
-                    MovieId = created.Id
-                };
-                await _genreRepository.AddMovieGenre(gen);
+                await _genreRepository.AddMovieGenre(item.Id,created.Id);
             }
 
             return created;
+        }
+
+        public async Task<Movie> UpdateMovie(CreateMovieRequest movieRequest)
+        {
+            var movie = ConvertRequestToMovie(movieRequest);
+            movie.Id = movieRequest.Id;
+            var updated = await _movieRepository.UpdateAsync(movie);
+
+            await _genreRepository.DeleteOldGenre(movie.Id);
+            foreach (var item in movieRequest.Genres)
+            {
+                await _genreRepository.AddMovieGenre(item.Id, movie.Id);
+            }
+
+            return updated;
+        }
+
+        private Movie ConvertRequestToMovie (CreateMovieRequest request)
+        {
+            return new Movie() { 
+                BackdropUrl = request.BackdropUrl,
+                Budget = request.Budget,
+                ImdbUrl = request.ImdbUrl,
+                OriginalLanguage = request.OriginalLanguage,
+                Overview = request.Overview,
+                PosterUrl = request.PosterUrl,
+                Price = request.Price,
+                ReleaseDate = request.ReleaseDate,
+                Revenue = request.Revenue,
+                RunTime = request.RunTime,
+                Tagline = request.Tagline,
+                Title = request.Title,
+                TmdbUrl = request.TmdbUrl
+            };
+        }
+
+        public async Task<List<MovieResponseModel>> GetAllMoviePurchases ()
+        {
+            var purchases = await _purchaseRepository.GetAllPurchases();
+            var movies = _mapper.Map<List<MovieResponseModel>>(purchases);
+
+            return movies;
         }
     }
 }

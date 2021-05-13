@@ -39,5 +39,6 @@ namespace ApplicationCore.Entities
         public ICollection<Favorite> Favorites { get; set; }
         public ICollection<Review> Reviews { get; set; }
         public ICollection<Purchase> Purchases { get; set; }
+        //public ICollection<MovieGenre> MovieGenres { get; set; }
     }
 }

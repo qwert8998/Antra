@@ -22,6 +22,12 @@ namespace Infrastructure.Helpers
             CreateMap<List<Review>, ReviewResponseModel>()
                 .ForMember(r => r.MovieReviews, opt => opt.MapFrom(src => GetUserReviewedMovies(src)))
                 .ForMember(r => r.UserId, opt => opt.MapFrom(src => src.FirstOrDefault().UserId));
+            
+            CreateMap<Purchase, MovieResponseModel>()
+                .ForMember(p => p.Id, opt => opt.MapFrom(src => src.Movie.Id))
+                .ForMember(p => p.Title, opt => opt.MapFrom(src => src.Movie.Title))
+                .ForMember(p => p.PosterUrl, opt => opt.MapFrom(src => src.Movie.PosterUrl))
+                .ForMember(p => p.ReleaseDate, opt => opt.MapFrom(src => src.Movie.ReleaseDate));
 
             // Request Models to Db Entities Mappings
             CreateMap<PurchaseRequestModel, Purchase>();

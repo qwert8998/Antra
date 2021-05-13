@@ -7,6 +7,7 @@ namespace ApplicationCore.RepositoryInterface
     public interface IGenreRepository : IAsyncRepository<Genre>
     {
         Task<List<Genre>> GetGenresByMovieId(int id);
-        Task AddMovieGenre(MovieGenre movieGenre);
+        Task AddMovieGenre(int genreId, int movieId);
+        Task DeleteOldGenre(int movieId);
     }
 }
